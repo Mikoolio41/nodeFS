@@ -1,8 +1,20 @@
-const products = require("../modules/modules.js");
+const products = require("../modules/products.js");
 
 const getProducts = (req, res) => {
   console.log("listening");
   res.json(products);
+};
+
+const productQuery = (req, res) => {
+  const name = req.query.q;
+  console.log("query", req.query);
+  const prodFilter = products.filter((item) => {
+    return item.name.toLowerCase().includes(name.toLowerCase());
+  });
+  if (prodFilter < 1) {
+    return res.status(200).json({ msg: "product not found" });
+  }
+  res.json(prodFilter);
 };
 
 const productParams = (req, res) => {
@@ -13,18 +25,6 @@ const productParams = (req, res) => {
     return res.status(404).json({ msg: "not found" });
   }
   res.json(product);
-};
-
-const productQuery = (req, res) => {
-  const name = req.query.q;
-  console.log(req.query);
-  const prodFilter = products.filter((item) => {
-    return item.name.toLowerCase().includes(name.toLowerCase());
-  });
-  if (prodFilter < 1) {
-    return res.status(200).json({ msg: "product not found" });
-  }
-  res.json(prodFilter);
 };
 
 const addProduct = (req, res) => {
